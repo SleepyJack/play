@@ -288,30 +288,32 @@ let unlockTimer = null;
 function setupUnlockGesture() {
   const unlockArea = document.getElementById('unlock-area');
 
-  unlockArea.addEventListener('touchstart', (e) => {
+  function startUnlock(e) {
     e.preventDefault();
     unlockArea.classList.add('unlocking');
 
     unlockTimer = setTimeout(() => {
       switchToParentMode();
     }, 3000);
-  });
+  }
 
-  unlockArea.addEventListener('touchend', () => {
+  function cancelUnlock() {
     unlockArea.classList.remove('unlocking');
     if (unlockTimer) {
       clearTimeout(unlockTimer);
       unlockTimer = null;
     }
-  });
+  }
 
-  unlockArea.addEventListener('touchcancel', () => {
-    unlockArea.classList.remove('unlocking');
-    if (unlockTimer) {
-      clearTimeout(unlockTimer);
-      unlockTimer = null;
-    }
-  });
+  // Touch events (for mobile)
+  unlockArea.addEventListener('touchstart', startUnlock);
+  unlockArea.addEventListener('touchend', cancelUnlock);
+  unlockArea.addEventListener('touchcancel', cancelUnlock);
+
+  // Mouse events (for desktop)
+  unlockArea.addEventListener('mousedown', startUnlock);
+  unlockArea.addEventListener('mouseup', cancelUnlock);
+  unlockArea.addEventListener('mouseleave', cancelUnlock);
 }
 
 function switchToParentMode() {
