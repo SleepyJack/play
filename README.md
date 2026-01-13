@@ -112,8 +112,8 @@ You can add custom images anytime in Parent Mode.
 - **No internet required** after first load
 - **Songs persist** across app restarts within the same browser and origin
 - **Storage is origin-specific**: Songs added when accessing via `http://192.168.1.5:8000` are separate from songs added via `file:///sdcard/music/index.html`
-- **Clearing browser data** will delete all songs (be careful!)
-- **Note**: If you test using the local server method and add songs, those songs will remain in your phone's browser storage even after switching to local file access, but won't be accessible. They just add minor storage bloat until you clear browser data.
+- **⚠️ Clearing browser data will delete ALL songs**, including your deployed app's library, not just orphaned dev server data! Only clear browser data if you want to start fresh or need to remove bloat from testing.
+- **Note**: If you test using the local server method and add songs, those songs will remain in your phone's browser storage even after switching to local file access, but won't be accessible. They just add minor storage bloat.
 
 ## Browser Compatibility
 
