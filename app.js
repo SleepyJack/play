@@ -87,19 +87,27 @@ async function deleteSong(id) {
 }
 
 // ===== AUDIO PLAYBACK =====
-function playSong(song) {
-  // Stop current song if playing
+function stopPlayback() {
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
   }
+  currentSongId = null;
+  updateNowPlaying(null);
+  updateSongTiles();
+}
 
+function playSong(song) {
   // If clicking the same song, just pause it
   if (currentSongId === song.id) {
-    currentSongId = null;
-    updateNowPlaying(null);
-    updateSongTiles();
+    stopPlayback();
     return;
+  }
+
+  // Stop current song if playing
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
   }
 
   // Create and play new audio
@@ -113,7 +121,7 @@ function playSong(song) {
   });
 
   // Update UI
-  updateNowPlaying(song.name);
+  updateNowPlaying(song);
   updateSongTiles();
 
   // Handle song end
@@ -125,15 +133,34 @@ function playSong(song) {
   };
 }
 
-function updateNowPlaying(songName) {
+function updateNowPlaying(song) {
   const nowPlaying = document.getElementById('now-playing');
-  const nowPlayingText = document.getElementById('now-playing-text');
+  nowPlaying.innerHTML = ''; // Clear contents
 
-  if (songName) {
-    nowPlayingText.textContent = `♪ ${songName}`;
+  if (song) {
+    // Create icon element
+    if (song.imageBlob) {
+      const img = document.createElement('img');
+      img.className = 'now-playing-icon';
+      img.src = URL.createObjectURL(song.imageBlob);
+      nowPlaying.appendChild(img);
+    } else {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'now-playing-placeholder';
+
+      const emoji = document.createElement('div');
+      emoji.textContent = getRandomEmoji();
+
+      const initial = document.createElement('div');
+      initial.textContent = song.name.charAt(0).toUpperCase();
+      initial.style.fontSize = '0.7em';
+
+      placeholder.appendChild(emoji);
+      placeholder.appendChild(initial);
+      nowPlaying.appendChild(placeholder);
+    }
     nowPlaying.classList.remove('hidden');
   } else {
-    nowPlayingText.textContent = '♪ Not playing';
     nowPlaying.classList.add('hidden');
   }
 }
@@ -391,12 +418,7 @@ async function deleteSongWithConfirm(songId, songName) {
   try {
     // Stop if currently playing
     if (currentSongId === songId) {
-      if (currentAudio) {
-        currentAudio.pause();
-        currentAudio = null;
-      }
-      currentSongId = null;
-      updateNowPlaying(null);
+      stopPlayback();
     }
 
     await deleteSong(songId);
@@ -417,6 +439,9 @@ function getRandomEmoji() {
 // ===== EVENT LISTENERS =====
 document.getElementById('back-to-child').addEventListener('click', switchToChildMode);
 document.getElementById('add-song-btn').addEventListener('click', handleAddSong);
+
+// Now playing click to stop
+document.getElementById('now-playing').addEventListener('click', stopPlayback);
 
 // Keep screen on setting
 document.getElementById('keep-screen-on').addEventListener('change', (e) => {
