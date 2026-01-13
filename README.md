@@ -24,12 +24,17 @@ A simple, offline-capable music player designed for toddlers (2+ years old).
 ### Installing on Your Phone
 
 **Method 1: Direct File Access (Recommended for Final Deployment)**
-1. Transfer these files to your phone (via USB, email, cloud storage, etc.)
-2. Open `index.html` in Chrome browser on your phone
+
+For Android devices, use the **standalone version** which bundles everything into a single file:
+
+1. Transfer `index-standalone.html` to your phone (via USB, email, cloud storage, etc.)
+2. Open `index-standalone.html` in Chrome browser on your phone
 3. Chrome menu (⋮) → "Add to Home Screen"
 4. The app appears as an icon on your home screen
 5. Opens full-screen like a native app
 6. Add your songs directly on the phone
+
+**Note:** The standalone file (`index-standalone.html`) works better on Android because some browsers block loading external CSS/JS files from `file://` URLs. If you're deploying to desktop or using a web server, you can use the regular `index.html` instead.
 
 **Method 2: Local Server (For Development/Testing Only)**
 
