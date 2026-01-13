@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-fullscreen">
+  <title>Music Player</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Child Mode (Default) -->
+  <div id="child-mode" class="active">
+    <!-- Hidden unlock area (top-right corner) -->
+    <div id="unlock-area" class="unlock-area">
+      <div id="unlock-progress" class="unlock-progress"></div>
+    </div>
+
+    <!-- Songs grid -->
+    <div id="songs-grid" class="songs-grid">
+      <!-- Songs will be dynamically inserted here -->
+    </div>
+
+    <!-- Now playing indicator -->
+    <div id="now-playing" class="now-playing hidden">
+      <span id="now-playing-text">♪ Not playing</span>
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="empty-state hidden">
+      <div class="empty-message">
+        <p>No songs yet!</p>
+        <p style="font-size: 0.6em; margin-top: 1em;">
+          Hold top-right corner for 3 seconds to add songs
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parent Mode (Hidden) -->
+  <div id="parent-mode">
+    <div class="parent-header">
+      <button id="back-to-child" class="back-button">← Back to Child Mode</button>
+      <h2>Parent Mode</h2>
+    </div>
+
+    <div class="parent-content">
+      <button id="add-song-btn" class="add-song-btn">+ Add New Song</button>
+
+      <h3>Your Songs:</h3>
+      <div id="songs-list" class="songs-list">
+        <!-- Songs list will be dynamically inserted here -->
+      </div>
+
+      <div class="settings-section">
+        <h3>Settings:</h3>
+        <label class="setting-item">
+          <input type="checkbox" id="keep-screen-on">
+          <span>Keep screen on while playing</span>
+        </label>
+        <div class="info">
+          <strong>Unlock gesture:</strong> 3-second press on top-right corner
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file inputs -->
+  <input type="file" id="audio-input" accept="audio/*" hidden>
+  <input type="file" id="image-input" accept="image/*" hidden>
+
+  <script src="app.js"></script>
+</body>
+</html>
