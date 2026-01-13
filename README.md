@@ -23,34 +23,55 @@ A simple, offline-capable music player designed for toddlers (2+ years old).
 
 ### Installing on Your Phone
 
-**Method 1: Direct File Access (Easiest)**
+**Method 1: Direct File Access (Recommended for Final Deployment)**
 1. Transfer these files to your phone (via USB, email, cloud storage, etc.)
 2. Open `index.html` in Chrome browser on your phone
 3. Chrome menu (⋮) → "Add to Home Screen"
 4. The app appears as an icon on your home screen
 5. Opens full-screen like a native app
+6. Add your songs directly on the phone
 
-**Method 2: Local Server (Better for development)**
-1. On your computer, run a local web server:
+**Method 2: Local Server (For Development/Testing Only)**
+
+⚠️ **Important:** Songs added using this method are stored in your phone's browser storage tied to the server URL (e.g., `http://192.168.1.5:8000`). They will NOT be accessible if you later switch to Method 1 (local file access). Use this method for testing only, then use Method 1 for final deployment and re-add your songs.
+
+1. On your computer, run a local web server **from the directory containing the app files**:
    ```bash
-   # If you have Python:
+   # Navigate to the app directory FIRST
+   cd /path/to/toddler-music-player
+
+   # Then start the server:
+
+   # If you have Python (Linux/Mac):
    python3 -m http.server 8000
 
-   # Or if you have Node.js:
+   # If you have Python (Windows):
+   python -m http.server 8000
+
+   # Or if you have Node.js (all platforms):
    npx http-server -p 8000
    ```
+
 2. Find your computer's local IP address:
    ```bash
    # Linux/Mac:
    ip addr show | grep "inet 192"
-
    # Or:
    ifconfig | grep "inet 192"
+
+   # Windows (Command Prompt):
+   ipconfig
+   # Look for "IPv4 Address" under your WiFi/Ethernet adapter (e.g., 192.168.1.XXX)
+
+   # Windows (PowerShell):
+   Get-NetIPAddress -AddressFamily IPv4 | Where-Object {$_.IPAddress -like "192.168.*"}
    ```
+
 3. On your phone (connected to same WiFi):
    - Open Chrome
-   - Go to `http://YOUR_IP:8000`
-   - Add to Home Screen
+   - Go to `http://YOUR_IP:8000` (replace YOUR_IP with the address from step 2)
+   - Test the app, try adding songs
+   - Note: Songs added here will persist only while accessing from this URL
 
 ## Parent Mode
 
@@ -89,8 +110,10 @@ You can add custom images anytime in Parent Mode.
 
 - **Everything stored locally** in your browser's IndexedDB
 - **No internet required** after first load
-- **Songs persist** across app restarts
+- **Songs persist** across app restarts within the same browser and origin
+- **Storage is origin-specific**: Songs added when accessing via `http://192.168.1.5:8000` are separate from songs added via `file:///sdcard/music/index.html`
 - **Clearing browser data** will delete all songs (be careful!)
+- **Note**: If you test using the local server method and add songs, those songs will remain in your phone's browser storage even after switching to local file access, but won't be accessible. They just add minor storage bloat until you clear browser data.
 
 ## Browser Compatibility
 
