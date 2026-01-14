@@ -349,6 +349,30 @@ body {
   border-top: 2px solid #e9ecef;
 }
 
+.backup-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.backup-btn {
+  flex: 1;
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.backup-btn:active {
+  background: #218838;
+  transform: scale(0.98);
+}
+
 .setting-item {
   display: flex;
   align-items: center;
