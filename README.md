@@ -88,11 +88,44 @@ For Android devices, use the **standalone version** which bundles everything int
 - ✅ Add new songs (MP3, M4A, etc.)
 - ✅ Set custom images for songs (JPG, PNG)
 - ✅ Delete songs
+- ✅ Export/import your song library
 - ✅ Toggle "Keep screen on" setting
 
 **Returning to Child Mode:**
 - Click "← Back to Child Mode" button
 - Auto-locks after 30 seconds of inactivity (feature can be added)
+
+## Backup & Restore
+
+The app includes export/import functionality to backup your entire song library and restore it anywhere.
+
+### Export Library (📥)
+
+**How it works:**
+1. In Parent Mode, tap "📥 Export Library"
+2. Downloads a backup file: `toddler-music-backup-YYYY-MM-DD.json`
+3. Contains all your songs, images, and metadata
+4. Save it to Google Drive, your computer, or anywhere safe
+
+**Use cases:**
+- 💾 **Backup before clearing browser data**
+- 📱 **Transfer to another device** (e.g., set up grandma's tablet)
+- 👨‍👩‍👧 **Share with family** so everyone has the same songs
+- 🔄 **Restore after data loss**
+
+### Import Library (📤)
+
+**How it works:**
+1. In Parent Mode, tap "📤 Import Library"
+2. Select your backup `.json` file
+3. Confirms how many songs will be added
+4. Imports songs into your library
+
+**Notes:**
+- ✅ Import **adds** to existing songs (doesn't replace)
+- ✅ Works across different browsers and devices
+- ✅ Completely offline after downloading the backup
+- ⚠️ Backup files can be large (~5-10MB per song with image)
 
 ## Child Mode
 
@@ -161,13 +194,13 @@ You can add custom images anytime in Parent Mode.
 
 ## Future Enhancements (Ideas)
 
+- [x] Export/backup song library ✅ **Implemented!**
 - [ ] Auto-lock Parent Mode after 30s
 - [ ] Shuffle mode
 - [ ] Favorites/playlists
 - [ ] Volume controls
 - [ ] Sleep timer
-- [ ] Import multiple songs at once
-- [ ] Export/backup song library
+- [ ] Batch import multiple songs at once (currently one at a time)
 
 ---
 
