@@ -12,71 +12,37 @@ A simple, offline-capable music player designed for toddlers (2+ years old).
 
 ## How to Use
 
-### Testing on Your Computer
+### Live App (Recommended)
 
-1. Open `index.html` in Chrome or Firefox
-2. You'll see an empty state (no songs yet)
-3. Hold the top-right corner for 3 seconds to unlock Parent Mode
-4. Click "Add New Song" and select an MP3 file
-5. The song appears with a random emoji placeholder
-6. Click "Set Icon" next to any song to add a custom image
+**Access the app at: https://sleepyjack.github.io/play/**
 
-### Installing on Your Phone
+1. Open the URL above on your phone in Chrome
+2. Chrome menu (⋮) → **"Add to Home Screen"**
+3. The app appears as an icon on your home screen
+4. Opens full-screen like a native app
+5. Hold the top-right corner for 3 seconds to unlock Parent Mode
+6. Add songs and set custom icons
+7. Return to Child Mode and enjoy!
 
-**Method 1: Direct File Access (Recommended for Final Deployment)**
+**Your songs are stored privately** in your phone's browser storage - they never get uploaded anywhere. The GitHub repo only contains the app code, not your music files.
 
-For Android devices, use the **standalone version** which bundles everything into a single file:
+### Local Development
 
-1. Transfer `index-standalone.html` to your phone (via USB, email, cloud storage, etc.)
-2. Open `index-standalone.html` in Chrome browser on your phone
-3. Chrome menu (⋮) → "Add to Home Screen"
-4. The app appears as an icon on your home screen
-5. Opens full-screen like a native app
-6. Add your songs directly on the phone
+For developers who want to modify the code:
 
-**Note:** The standalone file (`index-standalone.html`) works better on Android because some browsers block loading external CSS/JS files from `file://` URLs. If you're deploying to desktop or using a web server, you can use the regular `index.html` instead.
-
-**Method 2: Local Server (For Development/Testing Only)**
-
-⚠️ **Important:** Songs added using this method are stored in your phone's browser storage tied to the server URL (e.g., `http://192.168.1.5:8000`). They will NOT be accessible if you later switch to Method 1 (local file access). Use this method for testing only, then use Method 1 for final deployment and re-add your songs.
-
-1. On your computer, run a local web server **from the directory containing the app files**:
+1. Clone this repository
+2. Open `index.html` in Chrome or Firefox to test locally
+3. Or run a local server for testing:
    ```bash
-   # Navigate to the app directory FIRST
-   cd /path/to/toddler-music-player
+   # Navigate to the project directory
+   cd /path/to/play
 
-   # Then start the server:
+   # Start a local server
+   python3 -m http.server 8000    # Linux/Mac
+   python -m http.server 8000     # Windows
 
-   # If you have Python (Linux/Mac):
-   python3 -m http.server 8000
-
-   # If you have Python (Windows):
-   python -m http.server 8000
-
-   # Or if you have Node.js (all platforms):
-   npx http-server -p 8000
+   # Access at http://localhost:8000
    ```
-
-2. Find your computer's local IP address:
-   ```bash
-   # Linux/Mac:
-   ip addr show | grep "inet 192"
-   # Or:
-   ifconfig | grep "inet 192"
-
-   # Windows (Command Prompt):
-   ipconfig
-   # Look for "IPv4 Address" under your WiFi/Ethernet adapter (e.g., 192.168.1.XXX)
-
-   # Windows (PowerShell):
-   Get-NetIPAddress -AddressFamily IPv4 | Where-Object {$_.IPAddress -like "192.168.*"}
-   ```
-
-3. On your phone (connected to same WiFi):
-   - Open Chrome
-   - Go to `http://YOUR_IP:8000` (replace YOUR_IP with the address from step 2)
-   - Test the app, try adding songs
-   - Note: Songs added here will persist only while accessing from this URL
 
 ## Parent Mode
 
@@ -114,11 +80,11 @@ You can add custom images anytime in Parent Mode.
 ## Storage
 
 - **Everything stored locally** in your browser's IndexedDB
-- **No internet required** after first load
-- **Songs persist** across app restarts within the same browser and origin
-- **Storage is origin-specific**: Songs added when accessing via `http://192.168.1.5:8000` are separate from songs added via `file:///sdcard/music/index.html`
-- **⚠️ Clearing browser data will delete ALL songs**, including your deployed app's library, not just orphaned dev server data! Only clear browser data if you want to start fresh or need to remove bloat from testing.
-- **Note**: If you test using the local server method and add songs, those songs will remain in your phone's browser storage even after switching to local file access, but won't be accessible. They just add minor storage bloat.
+- **No internet required** after first load (Progressive Web App)
+- **Songs persist** across app restarts
+- **Your data is private** - songs and images never leave your device
+- **⚠️ Clearing browser data will delete ALL songs** - only do this if you want to start fresh
+- **Storage capacity** - Modern browsers allow 100+ MB, enough for many songs with images
 
 ## Browser Compatibility
 
