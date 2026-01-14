@@ -54,7 +54,16 @@
       </div>
 
       <div class="settings-section">
-        <h3>Settings:</h3>
+        <h3>Backup & Restore:</h3>
+        <div class="backup-buttons">
+          <button id="export-btn" class="backup-btn">📥 Export Library</button>
+          <button id="import-btn" class="backup-btn">📤 Import Library</button>
+        </div>
+        <div class="info">
+          Export your songs to a backup file. Import to restore on another device or after clearing browser data.
+        </div>
+
+        <h3 style="margin-top: 30px;">Settings:</h3>
         <label class="setting-item">
           <input type="checkbox" id="keep-screen-on">
           <span>Keep screen on while playing</span>
@@ -69,6 +78,7 @@
   <!-- Hidden file inputs -->
   <input type="file" id="audio-input" accept="audio/*" hidden>
   <input type="file" id="image-input" accept="image/*" hidden>
+  <input type="file" id="import-input" accept=".json" hidden>
 
   <script src="app.js"></script>
 </body>

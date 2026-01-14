@@ -430,6 +430,118 @@ async function deleteSongWithConfirm(songId, songName) {
   }
 }
 
+// ===== EXPORT/IMPORT =====
+async function exportLibrary() {
+  try {
+    const songs = await getAllSongs();
+
+    if (songs.length === 0) {
+      alert('No songs to export!');
+      return;
+    }
+
+    // Convert songs to exportable format
+    const exportData = {
+      version: 1,
+      exportDate: new Date().toISOString(),
+      songs: await Promise.all(songs.map(async (song) => {
+        // Convert blobs to base64
+        const audioBase64 = await blobToBase64(song.audioBlob);
+        const imageBase64 = song.imageBlob ? await blobToBase64(song.imageBlob) : null;
+
+        return {
+          name: song.name,
+          audio: audioBase64,
+          image: imageBase64,
+          addedDate: song.addedDate
+        };
+      }))
+    };
+
+    // Create and download file
+    const json = JSON.stringify(exportData);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `toddler-music-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+    alert(`Exported ${songs.length} song(s) successfully!`);
+  } catch (err) {
+    console.error('Export error:', err);
+    alert('Failed to export library. Please try again.');
+  }
+}
+
+async function importLibrary() {
+  const input = document.getElementById('import-input');
+  input.click();
+}
+
+async function handleImport(file) {
+  if (!file) return;
+
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+
+    if (!data.version || !data.songs) {
+      alert('Invalid backup file format!');
+      return;
+    }
+
+    // Confirm import
+    const existingSongs = await getAllSongs();
+    const message = existingSongs.length > 0
+      ? `This will add ${data.songs.length} song(s) to your existing ${existingSongs.length} song(s). Continue?`
+      : `Import ${data.songs.length} song(s)?`;
+
+    if (!confirm(message)) return;
+
+    // Import songs
+    let imported = 0;
+    for (const songData of data.songs) {
+      try {
+        // Convert base64 back to blobs
+        const audioBlob = await base64ToBlob(songData.audio);
+        const imageBlob = songData.image ? await base64ToBlob(songData.image) : null;
+
+        await addSong(songData.name, audioBlob, imageBlob);
+        imported++;
+      } catch (err) {
+        console.error(`Failed to import "${songData.name}":`, err);
+      }
+    }
+
+    // Refresh UI
+    await renderParentMode();
+    await renderChildMode();
+
+    alert(`Successfully imported ${imported} of ${data.songs.length} song(s)!`);
+  } catch (err) {
+    console.error('Import error:', err);
+    alert('Failed to import library. Please check the file and try again.');
+  }
+}
+
+// Helper functions for blob/base64 conversion
+async function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function base64ToBlob(base64) {
+  const response = await fetch(base64);
+  return await response.blob();
+}
+
 // ===== UTILITIES =====
 function getRandomEmoji() {
   const emojis = ['🎵', '🎶', '🎸', '🎹', '🎺', '🎻', '🥁', '🎤', '🎧', '🔊', '⭐', '🌟', '✨', '🌈', '🎨', '🎪'];
@@ -439,6 +551,17 @@ function getRandomEmoji() {
 // ===== EVENT LISTENERS =====
 document.getElementById('back-to-child').addEventListener('click', switchToChildMode);
 document.getElementById('add-song-btn').addEventListener('click', handleAddSong);
+
+// Export/Import
+document.getElementById('export-btn').addEventListener('click', exportLibrary);
+document.getElementById('import-btn').addEventListener('click', importLibrary);
+document.getElementById('import-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    handleImport(file);
+  }
+  e.target.value = ''; // Reset input
+});
 
 // Now playing click to stop
 document.getElementById('now-playing').addEventListener('click', stopPlayback);
